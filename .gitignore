@@ -24,3 +24,6 @@
 
 
 *heroku*
+
+# Ignore Spring files.
+/spring/*.pid
