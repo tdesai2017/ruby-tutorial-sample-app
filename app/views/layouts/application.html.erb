@@ -6,8 +6,18 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    
+    <!--Shim doesn't exist as of right now-->
+    <!-- render 'layouts/shim'-->
   </head>
 
   <body>
+    <%= render 'layouts/header'%>
+    <div class="container">
+      <!--Yield inserts the body of all views using this layout into this yeild tag-->
+      <%= yield %>
+      <%= render 'layouts/footer'%>
+    </div>
   </body>
 </html>
+
