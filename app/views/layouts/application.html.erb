@@ -14,9 +14,13 @@
   <body>
     <%= render 'layouts/header'%>
     <div class="container">
+      <%flash.each do |message_type, message| %>
+        <div class = "alert alert-<%= message_type %>"><%= message %> </div>
+      <% end %>
       <!--Yield inserts the body of all views using this layout into this yeild tag-->
       <%= yield %>
       <%= render 'layouts/footer'%>
+      <%= debug(params) if Rails.env.development? %>
     </div>
   </body>
 </html>
