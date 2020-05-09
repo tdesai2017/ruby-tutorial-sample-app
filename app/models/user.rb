@@ -5,7 +5,10 @@ class User < ApplicationRecord
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, length: {maximum: 255}, format: {with: VALID_EMAIL_REGEX}, uniqueness: {case_sensitive:false}
   has_secure_password
-  validates :password, presence: true, length: {minimum:6}
+  # This will not allow users to sign up with empty passwords since "has_secure_password" (above) has its own validation of password presence
+  #This is put in place so people can update other parts of their profile and don't have to update their password field every time
+  
+  validates :password, presence: true, length: {minimum:6}, allow_nil: true
   
   
   
