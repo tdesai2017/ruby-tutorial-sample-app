@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :microposts, dependent: :destroy
   #These are all active record Methods
   before_save { self.email = email.downcase }
   validates :name, presence: true, length: {maximum: 50}
@@ -12,7 +13,12 @@ class User < ApplicationRecord
   
   
   
-  
+  def feed 
+    #id here is the same as self.id I think
+    #This question mark format ensures safety against a sql injection
+    return Micropost.where("user_id = ?", id)
+  end
+    
   
   
   #Returns the hash digest of the given string.

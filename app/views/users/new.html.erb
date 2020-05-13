@@ -8,7 +8,9 @@
     <!--This is a partial found in the views/shared directory-->
     <!--Password must be blank is printed twice since 
     https://stackoverflow.com/questions/17116696/password-cant-be-blank-displayed-twice-->
-      <%= render 'shared/error_messages' %>
+    
+    <!--Passes 'object' to the _error_messages partial-->
+      <%= render 'shared/error_messages', object: f.object %>
       
       <%= f.label :name %>      
       <%= f.text_field :name, class: 'form-control' %>
