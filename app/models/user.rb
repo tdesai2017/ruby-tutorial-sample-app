@@ -24,6 +24,7 @@ class User < ApplicationRecord
     # return Micropost.where("user_id IN (:following_ids) OR user_id = :user_id", following_ids: following_ids, user_id: id)
     #Sub selects from the total following posts somehow
     following_ids = "SELECT followed_id FROM relationships WHERE follower_id = :user_id"
+    #Don't really understand this
     Micropost.where("user_id IN (#{following_ids}) OR user_id = :user_id", user_id: id)
   end
   
