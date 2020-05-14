@@ -1,5 +1,12 @@
 class User < ApplicationRecord
   has_many :microposts, dependent: :destroy
+  has_many :active_relationships, class_name: "Relationship",  foreign_key: "follower_id", dependent: :destroy
+  has_many :passive_relationships, class_name: "Relationship",  foreign_key: "followed_id", dependent: :destroy
+  
+  #A user has many following it, a relationship that is dilineated through the above :active_relationships connection
+  #Source is a renaming of the default :followed (looking at the follow_id foreign key) to the more readable :following
+  has_many :following, through: :active_relationships, source: :followed
+  has_many :followers, through: :passive_relationships, source: :follower
   #These are all active record Methods
   before_save { self.email = email.downcase }
   validates :name, presence: true, length: {maximum: 50}
@@ -14,13 +21,29 @@ class User < ApplicationRecord
   
   
   def feed 
-    #id here is the same as self.id I think
-    #This question mark format ensures safety against a sql injection
-    return Micropost.where("user_id = ?", id)
+    # return Micropost.where("user_id IN (:following_ids) OR user_id = :user_id", following_ids: following_ids, user_id: id)
+    #Sub selects from the total following posts somehow
+    following_ids = "SELECT followed_id FROM relationships WHERE follower_id = :user_id"
+    Micropost.where("user_id IN (#{following_ids}) OR user_id = :user_id", user_id: id)
   end
+  
+  #Follows a user - I guess << is a short way to follow another user
+  def follow(other_user)
+    following << other_user
+  end
+  
+  #Unfollows a user
+  def unfollow(other_user)
+    following.delete(other_user)
+  end
+  
+  #Returns true if the current user is following the other user
+  def following?(other_user)
+    following.include?(other_user)
+  end
+  
+  
     
-  
-  
   #Returns the hash digest of the given string.
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost

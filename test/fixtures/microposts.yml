@@ -1,6 +1,8 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 #It is good to explicitly write timestamps in fixtures if the test is timestamp dependent
 
+#Let's you say "user: michael" as opposed to "user_id: 1"
+
 orange:
   content: "I just ate an orange!"
   created_at: <%= 10.minutes.ago %>
